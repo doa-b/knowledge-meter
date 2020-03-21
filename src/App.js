@@ -36,6 +36,9 @@ const passwordForgetPage = asyncComponent(() => {
 const privacyPolicyPage = asyncComponent(() => {
     return import ('./PrivacyPolicy/PrivacyPolicy')
 });
+const knowledgePage = asyncComponent(()=> {
+    return import('./components/Knowledge/Knowledge')
+});
 
 /**
  * Created by Doa on 27-1-2020.
@@ -52,6 +55,8 @@ const routes = (
         <Route path={ROUTES.ACCOUNT} component={accountPage} />
         <Route path={ROUTES.ADMIN} component={adminPage} />
         <Route path={ROUTES.PRIVACY_POLICY} component={privacyPolicyPage} />
+        <Route  path={ROUTES.KNOWLEDGE  + '/:id'} component={knowledgePage}/>
+
     </Switch>
 );
 

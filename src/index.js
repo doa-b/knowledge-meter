@@ -7,11 +7,11 @@ import * as serviceWorker from './serviceWorker';
 
 import Firebase, { FirebaseContext } from './components/Firebase';
 import {createStore, applyMiddleware, compose, combineReducers} from 'redux'
-import dummyReducer from './store/reducers/dummy'
+import preferencesReducer from './store/reducers/preferences'
 import {Provider} from 'react-redux';
 
 const rootReducer = combineReducers({
-    dummy: dummyReducer
+    preferences: preferencesReducer
 });
 
 const composeEnhancers = (process.env.NODE_ENV === 'development') ?

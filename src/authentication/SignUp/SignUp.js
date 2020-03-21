@@ -4,6 +4,7 @@ import * as ROUTES from '../../shared/routes';
 import {withFirebase} from '../../components/Firebase'
 import {compose} from 'redux';
 import UserInfo from '../../forms/UserInfo';
+import {fetchSkillTree} from "../../bootstrap/defaultItems";
 
 const SignUpPage = (props) => {
     const [error, setError] = useState(null);

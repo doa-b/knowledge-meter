@@ -62,6 +62,9 @@ class Firebase {
     user = uid => this.db.ref(`users/${uid}`);
     users = () => this.db.ref('users');
 
+    // *** Knowledge API ***
+    knowledge = (id) => this.db.ref(`knowledge/${id}`);
+
     // *** Storage API ***
 
     image = image => this.storage.ref(`images/${image.name}`);
@@ -119,7 +122,5 @@ class Firebase {
         });
 
 }
-
-
 
 export default Firebase

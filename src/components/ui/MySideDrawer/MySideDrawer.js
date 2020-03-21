@@ -121,6 +121,12 @@ const MySideDrawer = withStyles(styles)(
                     Navigation
                 </ListSubheader>
                 <NavItem
+                    to={ROUTES.KNOWLEDGE + `/${authUser.firstName.toLowerCase()}-${authUser.lastName.toLowerCase()}`}
+                    text='Knowledge'
+                    Icon={HomeIcon}
+                    onClick={onItemClick()}
+                />
+                <NavItem
                     to={ROUTES.LANDING}
                     text='Landing'
                     Icon={HomeIcon}
