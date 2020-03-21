@@ -8,7 +8,18 @@ import {skillTree, fetchSkillTree} from "../../bootstrap/defaultItems";
 import Group from "../Group/Group";
 import Grid from '@material-ui/core/Grid';
 import Typography from "@material-ui/core/Typography";
+import Snackbar from '@material-ui/core/Snackbar';
+import InfoIcon from '@material-ui/icons/InfoOutlined';
+import IconButton from '@material-ui/core/IconButton';
+import MuiAlert from '@material-ui/lab/Alert';
+import Dialog from "@material-ui/core/Dialog";
 import {updateObject} from "../../shared/utility";
+import * as actions from "../../store/actions";
+import {connect} from "react-redux";
+import Spinner from "../ui/Spinner/Spinner";
+import {DialogTitle} from "@material-ui/core";
+import DialogContent from "@material-ui/core/DialogContent";
+import LegendDialog from "../ui/LegendDialog/LegendDialog";
 
 const styles = theme => ({
     root: {
@@ -31,26 +42,34 @@ const loopThroughObjects = (object) => {
     }
     return myArray;
 };
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 /**
  * Created by Doa on 27-1-2020.
  */
 const Knowledge = withStyles(styles)(
-    ({classes, firebase, match}) => {
+    ({classes, firebase, match, showControls, showZeroXP}) => {
         const preLoaddedSkillSet = fetchSkillTree();
         const knowledgeId = match.params.id || '0000';
         const name = knowledgeId.split('-');
         const [skillSet, setSkillSet] = useState(preLoaddedSkillSet);
-        const [loaded, setLoading] = useState(false);
+        const [loading, setLoading] = useState(true);
+        const [showInfo, setShowInfo] = useState(true);
+        const [showDialog, setShowDialog] = useState(false);
+
         useEffect(() => {
-            if (!loaded) {
-                setLoading(true);
+            if (loading) {
+
                 firebase.knowledge(knowledgeId).once("value")
                     .then(snapshot => {
                         if (snapshot.val()) {
                             setSkillSet(prevState => updateObject(prevState, snapshot.val()));
                             console.log('fetched data');
-                            (console.log(snapshot.val()))
+                            (console.log(snapshot.val()));
                         }
+                        setLoading(false);
                     });
             }
         },);
@@ -62,31 +81,54 @@ const Knowledge = withStyles(styles)(
 
         return (
             <>
-                <AuthUserContext.Consumer>
-                    {authUser => {
-                        return (
-                            <div className={classes.root}>
-                                <Typography variant='h2'>{'Knowledge of ' + name[0] + ' ' + name[1]}</Typography>
-                                {/*<button onClick={resetAll}>*/}
-                                {/*    Reset All to default*/}
-                                {/*</button>*/}
-                                <Grid className={classes.container} container alignItems='center' justify='space-around' alignContent='center'>
-                                    {loopThroughObjects(skillSet).map((group, index) =>
-                                        <Group key={index}
-                                               skillGroup={group}
-                                               user={authUser}
-                                               knowlegdeId={knowledgeId}/>)}                                </Grid>
+                {loading ? (<Spinner/>) : (
+                    <AuthUserContext.Consumer>
+                        {authUser => {
+                            return (
+                                <div className={classes.root}>
+                                    <Typography variant='h2'>{'Knowledge of ' + name[0] + ' ' + name[1]}
+                                    <IconButton onClick={()=> setShowDialog(true)}>
+                                        <InfoIcon/>
+                                    </IconButton>
+                                    </Typography>
+                                    <Grid className={classes.container} container alignItems='center' justify='space-around' alignContent='center'>
+                                        {loopThroughObjects(skillSet).map((group, index) =>
+                                            <Group key={index}
+                                                   skillGroup={group}
+                                                   user={authUser}
+                                                   knowlegdeId={knowledgeId}
+                                                   showZeroXP={showZeroXP}
+                                                   showControls={showControls}
+                                            />)}
+                                    </Grid>
+                                    <Snackbar
+                                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                                        open={showInfo && !showZeroXP}
+                                        autoHideDuration={6000}
+                                        onClose={()=>setShowInfo(false)}>
+                                        <Alert onClose={()=>setShowInfo(false)} severity="info">
+                                            Skills with 0 experience are hidden
+                                        </Alert>
+                                    </Snackbar>
+                                </div>)
+                        }}
+                    </AuthUserContext.Consumer>
+                )}
+                <Dialog open={showDialog} onClose={()=> setShowDialog(false)}>
+                   <LegendDialog/>
 
-                            </div>)
-                    }}
-                </AuthUserContext.Consumer>
-
+                </Dialog>
             </>);
     });
 
-//  broad-grained authorization condition
-const condition = authUser => !!authUser;
+const mapStateToProps = (state) => {
+    return {
+        showControls: state.preferences.showControls,
+        showZeroXP: state.preferences.showZeroXP
+    }
+};
 
 export default compose(
-    withFirebase
+    withFirebase,
+    connect(mapStateToProps)
 )(Knowledge);

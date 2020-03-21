@@ -13,7 +13,6 @@ import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
 import UnfoldLessIcon from '@material-ui/icons/UnfoldLess';
 
 
-
 const styles = theme => ({
     menuButton: {
         marginLeft: -12,
@@ -52,24 +51,22 @@ const MyToolbar = withStyles(styles)(
                     >
                         <MenuIcon/>
                     </IconButton>
-                    <Typography
-                        variant='h5'
-                        color='inherit'
-                        className={classes.flex}
-                    >
-                        {title}
-                    </Typography>
-                    {(title === 'Schedule') ? (
-                        <IconButton
-                            className={classes.fold}
-                            color='inherit'
-                            aria-label='Fold'
-                            onClick={() => setShowAllScenes(!showAllScenes)}
-                        >
-                            <Tooltip title='show/hide scenes' placement='left-end'>
-                                {(showAllScenes) ? <UnfoldLessIcon/> : <UnfoldMoreIcon/>}
-                            </Tooltip>
-                        </IconButton>
+
+                    {/*Sign up to showcase your own knowledge!*/}
+                    {(title === 'Home') ? (
+                        <AuthUserContext.Consumer>
+                            {authUser => !authUser
+                                ? (
+                                    <Typography variant='h5' color='inherit'>
+                                        Sign up to showcase your own knowledge!
+                                    </Typography>
+                                )
+                                : (
+                                    <Typography variant='h5' color='inherit'>
+                                        {title}
+                                    </Typography>)}
+
+                        </AuthUserContext.Consumer>
                     ) : null}
                     <div className={classes.corner}>
                     </div>

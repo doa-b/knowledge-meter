@@ -46,7 +46,7 @@ const knowledgePage = asyncComponent(()=> {
 
 const routes = (
     <Switch>
-        <Route exact path={ROUTES.LANDING} component={landingPage} />
+        <Route exact path={ROUTES.LANDING} component={knowledgePage}/>
         <Route path={ROUTES.SIGN_UP} component={signUpPage} />
         <Route path={ROUTES.SIGN_IN} component={signInPage} />
         <Route path={ROUTES.SIGN_OUT} component={signOutPage} />
@@ -56,7 +56,6 @@ const routes = (
         <Route path={ROUTES.ADMIN} component={adminPage} />
         <Route path={ROUTES.PRIVACY_POLICY} component={privacyPolicyPage} />
         <Route  path={ROUTES.KNOWLEDGE  + '/:id'} component={knowledgePage}/>
-
     </Switch>
 );
 

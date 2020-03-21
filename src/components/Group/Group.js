@@ -9,7 +9,9 @@ import TextField from '@material-ui/core/TextField';
 
 import {compareValues, updateObject} from "../../shared/utility";
 import {Paper, Typography, Grid} from "@material-ui/core";
-import {lightBlue} from "@material-ui/core/colors";
+
+import {compose} from "redux";
+import {connect} from "react-redux";
 
 const styles = theme => ({
     root: {},
@@ -55,16 +57,19 @@ const styles = theme => ({
  * Created by Doa on 19-3-2020.
  */
 const Group = withStyles(styles)(
-    ({classes, skillGroup, user, firebase, knowlegdeId = '0000'}) => {
+    ({
+         classes, skillGroup, user, firebase, knowlegdeId = '0000',
+         showControls, showZeroXP
+     }) => {
 
         const groupName = Object.keys(skillGroup)[0];
         const [skills, setSkills] = useState(skillGroup[groupName]);
         const [isChanged, setIsChanged] = useState(false);
         const [newSkill, setNewSkill] = useState(null);
 
-        useEffect(() => {
-            setSkills(skillGroup[groupName])
-        }, [skillGroup]);
+        // useEffect(() => {
+        //     setSkills(skillGroup[groupName])
+        // }, [skillGroup]);
 
         const handleSkillChange = (name, value) => {
             // only editable when registered user
@@ -92,8 +97,8 @@ const Group = withStyles(styles)(
 
         const saveSkills = () => {
             if (user) {
-               let updatedSkills = skills;
-                if(newSkill && newSkill.title) {
+                let updatedSkills = skills;
+                if (newSkill && newSkill.title) {
                     // add new skill to skills
                     setSkills(updateObject(skills, {[newSkill.title]: newSkill.level}));
                     updatedSkills = (updateObject(updatedSkills, {[newSkill.title]: newSkill.level}))
@@ -110,8 +115,8 @@ const Group = withStyles(styles)(
         };
 
         const removeNewSkill = () => {
-          setNewSkill(null);
-          setIsChanged(false);
+            setNewSkill(null);
+            setIsChanged(false);
         };
 
 
@@ -122,8 +127,9 @@ const Group = withStyles(styles)(
                         <div className={classes.title}>
                             <Typography variant='h4'>{groupName}</Typography>
                         </div>
-                        {Object.entries(skills).sort().map((skill, index) => (
-                            <div key={index} className={classes.skill}>
+                        {Object.entries(skills).sort().map((skill, index) => {
+                            if (skill[1] == 0 && !showZeroXP) return
+                            return (<div key={index} className={classes.skill}>
                                 {skill[0]}
                                 <Rating className={classes.level}
                                         name={skill[0]}
@@ -133,8 +139,8 @@ const Group = withStyles(styles)(
                                             handleSkillChange(skill[0], newValue)
                                         }}
                                 />
-                            </div>
-                        ))}
+                            </div>)
+                        })}
                         {newSkill ? (
                             <form noValidate autoComplete="off" className={classes.skill}>
                                 <TextField
@@ -151,8 +157,8 @@ const Group = withStyles(styles)(
                                         }}
                                 />
                             </form>
-                        ): null}
-                        <div className={clsx(classes.buttonContainer, {[classes.hidden]: !user})}>
+                        ) : null}
+                        <div className={clsx(classes.buttonContainer, {[classes.hidden]: !user}, {[classes.hidden]: !showControls})}>
                             <Button
                                 disabled={!isChanged}
                                 className={classes.button}
@@ -188,4 +194,6 @@ const Group = withStyles(styles)(
             </Grid>);
     });
 
-export default withFirebase(Group);
+export default compose(
+    withFirebase
+)(Group);

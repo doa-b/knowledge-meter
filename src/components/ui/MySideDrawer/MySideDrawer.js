@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {Route, NavLink, Switch} from 'react-router-dom';
+import * as actions from "../../../store/actions";
+import {connect} from "react-redux";
+
 import clsx from 'clsx';
 import * as ROUTES from '../../../shared/routes';
 import * as ACCESSLEVEL from '../../../shared/accessLevel';
@@ -21,6 +24,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
+
 
 const styles = theme => ({
     root: {
@@ -51,35 +55,31 @@ const styles = theme => ({
     nonAuth: {
         textAlign: 'center',
         maxWidth: 150
-    }
+    },
 });
 
 const MySideDrawer = withStyles(styles)(
-    ({
-         classes, variant, open, onClose, onItemClick,
-         showSeconds, toggleShowSeconds, displayRealTime, toggleDisplayRealTime,
-         isEditable, toggleIsEditable, isLive
-     }) => {
-        const [setting1, toggleSetting1] = useState(false);
+    ({classes, variant, open, onClose, onItemClick,
+         showZeroXP, showControls, onToggleShowZeroXP, onToggleShowControls}) => {
 
         const SideDrawerNonAuth = () => (
-            <List>
-                <Typography className={classes.nonAuth} variant='subtitle1' >
-                   This App needs authentication
-                </Typography>
-                <NavItem
-                    to={ROUTES.SIGN_IN}
-                    text='Sign in'
-                    Icon={LockOpenIcon}
-                    onClick={onItemClick()}
-                />
-                <NavItem
-                    to={ROUTES.SIGN_UP}
-                    text='Sign up'
-                    Icon={PersonOutlineIcon}
-                    onClick={onItemClick()}
-                />
-            </List>
+                <List>
+                    <Typography className={classes.nonAuth} variant='subtitle1' >
+                        This App needs authentication
+                    </Typography>
+                    <NavItem
+                        to={ROUTES.SIGN_IN}
+                        text='Sign in'
+                        Icon={LockOpenIcon}
+                        onClick={onItemClick()}
+                    />
+                    <NavItem
+                        to={ROUTES.SIGN_UP}
+                        text='Sign up'
+                        Icon={PersonOutlineIcon}
+                        onClick={onItemClick()}
+                    />
+                </List>
         );
 
         const SideDrawerAuth = ({ authUser }) => (
@@ -110,11 +110,20 @@ const MySideDrawer = withStyles(styles)(
                 </ListSubheader>
                 <ListItem>
                     <Checkbox
-                        value={setting1}
-                        onChange={()=> toggleSetting1(!setting1)}
-                        checked={setting1}/>
+                        value={showZeroXP}
+                        onChange={onToggleShowZeroXP}
+                        checked={showZeroXP}/>
                     <ListItemText>
-                       Dummy Setting
+                       Show No Experience
+                    </ListItemText>
+                </ListItem>
+                <ListItem>
+                    <Checkbox
+                        value={showControls}
+                        onChange={onToggleShowControls}
+                        checked={showControls}/>
+                    <ListItemText>
+                        Show Controls
                     </ListItemText>
                 </ListItem>
                 <ListSubheader>
@@ -202,4 +211,19 @@ const NavItem = props => (
     </Switch>
 );
 
-export default MySideDrawer;
+const mapStateToProps = (state) => {
+    return {
+        showControls: state.preferences.showControls,
+        showZeroXP: state.preferences.showZeroXP
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onToggleShowControls: () => dispatch(actions.toggleShowControls()),
+        onToggleShowZeroXP: () => dispatch(actions.toggleShowZeroXP())
+    }
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(MySideDrawer);

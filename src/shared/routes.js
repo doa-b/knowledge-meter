@@ -20,6 +20,6 @@ export const pageTitle = (route) => {
         case PASSWORD_FORGET: return 'Forgot Password';
         case PRIVACY_POLICY: return 'Privacy Policy';
         case KNOWLEDGE: return 'Knowledge';
-        default: return 'home'
+        default: return 'Home'
     }
 };
