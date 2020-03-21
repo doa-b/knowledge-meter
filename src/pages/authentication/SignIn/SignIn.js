@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {compose} from 'redux';
 import { SignUpLink } from '../SignUp/SignUp';
-import {PasswordForgetLink} from '..';
-import { withFirebase} from '../../components/Firebase';
-import * as ROUTES from '../../shared/routes';
+import {PasswordForgetLink} from '../../../authentication';
+import { withFirebase} from '../../../components/Firebase';
+import * as ROUTES from '../../../shared/routes';
 import {withStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -59,7 +59,7 @@ class SignInPage extends Component {
             .doSignInWithEmailAndPassword(email, password)
             .then(() => {
                 this.setState({...INITIAL_STATE});
-                this.props.history.push(ROUTES.HOME);
+                this.props.history.push(ROUTES.LANDING);
             })
             .catch(error => {
                 this.setState({error});

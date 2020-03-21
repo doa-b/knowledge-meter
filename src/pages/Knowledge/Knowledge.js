@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {compose} from "redux";
-import withStyles from '@material-ui/core/styles/withStyles'
-import {withAuthorization, AuthUserContext} from '../Session/';
-import {withFirebase} from "../Firebase";
+import {connect} from "react-redux";
 
-import {skillTree, fetchSkillTree} from "../../bootstrap/defaultItems";
-import Group from "../Group/Group";
+import {AuthUserContext} from '../../components/Session';
+import {withFirebase} from "../../components/Firebase";
+
+import withStyles from '@material-ui/core/styles/withStyles'
 import Grid from '@material-ui/core/Grid';
 import Typography from "@material-ui/core/Typography";
 import Snackbar from '@material-ui/core/Snackbar';
@@ -14,14 +14,13 @@ import IconButton from '@material-ui/core/IconButton';
 import MuiAlert from '@material-ui/lab/Alert';
 import Dialog from "@material-ui/core/Dialog";
 import {updateObject} from "../../shared/utility";
-import * as actions from "../../store/actions";
-import {connect} from "react-redux";
-import Spinner from "../ui/Spinner/Spinner";
-import {DialogTitle} from "@material-ui/core";
-import DialogContent from "@material-ui/core/DialogContent";
-import LegendDialog from "../ui/LegendDialog/LegendDialog";
 
-const styles = theme => ({
+import {fetchSkillTree} from "../../bootstrap/defaultItems";
+import Group from "./Group/Group";
+import Spinner from "../../components/ui/Spinner/Spinner";
+import LegendDialog from "../../components/ui/LegendDialog/LegendDialog";
+
+const styles = () => ({
     root: {
         flexGrow: 1,
         textAlign: 'center'
@@ -34,10 +33,10 @@ const styles = theme => ({
 
 const loopThroughObjects = (object) => {
     const myArray = [];
-    for (var key in object) {
+    for (let key in object) {
         // skip loop if the property is from prototype
         if (!object.hasOwnProperty(key)) continue;
-        var obj = object[key];
+        let obj = object[key];
         myArray.push({[key]: obj})
     }
     return myArray;
@@ -52,7 +51,7 @@ function Alert(props) {
 const Knowledge = withStyles(styles)(
     ({classes, firebase, match, showControls, showZeroXP}) => {
         const preLoaddedSkillSet = fetchSkillTree();
-        const knowledgeId = match.params.id || '0000';
+        const knowledgeId = match.params.id || '0001';
         const name = knowledgeId.split('-');
         const [skillSet, setSkillSet] = useState(preLoaddedSkillSet);
         const [loading, setLoading] = useState(true);
@@ -61,7 +60,6 @@ const Knowledge = withStyles(styles)(
 
         useEffect(() => {
             if (loading) {
-
                 firebase.knowledge(knowledgeId).once("value")
                     .then(snapshot => {
                         if (snapshot.val()) {
@@ -72,12 +70,7 @@ const Knowledge = withStyles(styles)(
                         setLoading(false);
                     });
             }
-        },);
-
-        const resetAll = () => {
-            firebase.knowledge(knowledgeId).remove()
-            setSkillSet(preLoaddedSkillSet)
-        };
+        });
 
         return (
             <>
@@ -86,15 +79,19 @@ const Knowledge = withStyles(styles)(
                         {authUser => {
                             return (
                                 <div className={classes.root}>
-                                    <Typography variant='h2'>{'Knowledge of ' + name[0] + ' ' + name[1]}
+                                    {knowledgeId !=='0001' ? (
+                                        <Typography variant='h2'>{'Knowledge of ' + name[0] + ' ' + name[1]}
+                                        </Typography>
+                                    ) : null}
                                     <IconButton onClick={()=> setShowDialog(true)}>
                                         <InfoIcon/>
                                     </IconButton>
-                                    </Typography>
+
                                     <Grid className={classes.container} container alignItems='center' justify='space-around' alignContent='center'>
                                         {loopThroughObjects(skillSet).map((group, index) =>
                                             <Group key={index}
                                                    skillGroup={group}
+                                                   groupName={Object.keys(group)[0]}
                                                    user={authUser}
                                                    knowlegdeId={knowledgeId}
                                                    showZeroXP={showZeroXP}

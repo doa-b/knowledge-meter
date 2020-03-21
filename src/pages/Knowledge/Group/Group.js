@@ -1,19 +1,19 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState} from 'react';
 import clsx from "clsx";
 
 import withStyles from '@material-ui/core/styles/withStyles'
-import {withFirebase} from "../Firebase";
 import Rating from '@material-ui/lab/Rating';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-
-import {compareValues, updateObject} from "../../shared/utility";
 import {Paper, Typography, Grid} from "@material-ui/core";
 
-import {compose} from "redux";
-import {connect} from "react-redux";
+import {updateObject} from "../../../shared/utility";
+import {withFirebase} from "../../../components/Firebase";
 
-const styles = theme => ({
+
+
+
+const styles = () => ({
     root: {},
     paper: {
         maxWidth: 320,
@@ -58,18 +58,12 @@ const styles = theme => ({
  */
 const Group = withStyles(styles)(
     ({
-         classes, skillGroup, user, firebase, knowlegdeId = '0000',
+         classes, skillGroup, user, firebase, knowlegdeId = '0000', groupName = '',
          showControls, showZeroXP
      }) => {
-
-        const groupName = Object.keys(skillGroup)[0];
         const [skills, setSkills] = useState(skillGroup[groupName]);
         const [isChanged, setIsChanged] = useState(false);
         const [newSkill, setNewSkill] = useState(null);
-
-        // useEffect(() => {
-        //     setSkills(skillGroup[groupName])
-        // }, [skillGroup]);
 
         const handleSkillChange = (name, value) => {
             // only editable when registered user
@@ -101,12 +95,11 @@ const Group = withStyles(styles)(
                 if (newSkill && newSkill.title) {
                     // add new skill to skills
                     setSkills(updateObject(skills, {[newSkill.title]: newSkill.level}));
-                    updatedSkills = (updateObject(updatedSkills, {[newSkill.title]: newSkill.level}))
+                    updatedSkills = (updateObject(updatedSkills, {[newSkill.title]: newSkill.level}));
                     setNewSkill(null)
                 }
-                //firebase.user(user.uid).child('knowledge').child(groupName).update(skills);
-                firebase.knowledge(knowlegdeId).child(groupName).update(updatedSkills);
-                setIsChanged(false)
+                firebase.knowledge(knowlegdeId).child(groupName).update(updatedSkills)
+                    .then( () => setIsChanged(false));
             }
         };
 
@@ -128,7 +121,7 @@ const Group = withStyles(styles)(
                             <Typography variant='h4'>{groupName}</Typography>
                         </div>
                         {Object.entries(skills).sort().map((skill, index) => {
-                            if (skill[1] == 0 && !showZeroXP) return
+                            if (skill[1] === 0 && !showZeroXP) return null;
                             return (<div key={index} className={classes.skill}>
                                 {skill[0]}
                                 <Rating className={classes.level}
@@ -194,6 +187,4 @@ const Group = withStyles(styles)(
             </Grid>);
     });
 
-export default compose(
-    withFirebase
-)(Group);
+export default withFirebase(Group);

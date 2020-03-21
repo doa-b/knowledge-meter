@@ -1,18 +1,17 @@
 import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles'
 
-const styles = theme => ({
+const styles = () => ({
     root: {},
 });
 /**
- * Created by Doa on 28-1-2020.
+ * Created by Doa on 21-3-2020.
  */
-const PrivacyPolicy = withStyles(styles)(
+const Home = withStyles(styles)(
     ({classes}) => {
         return (
             <>
-                <h2>Privacy Policy</h2>
             </>);
     });
 
-export default PrivacyPolicy;
+export default Home;

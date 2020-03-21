@@ -1,17 +1,13 @@
 import React from 'react';
 import {AuthUserContext} from '../../Session'
 
-import {Tooltip, withStyles} from '@material-ui/core';
+import { withStyles} from "@material-ui/core";
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
-
-import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
-import UnfoldLessIcon from '@material-ui/icons/UnfoldLess';
-
 
 const styles = theme => ({
     menuButton: {
@@ -39,7 +35,7 @@ const styles = theme => ({
 });
 
 const MyToolbar = withStyles(styles)(
-    ({classes, title, onMenuClick, isLive, showName, showAllScenes, setShowAllScenes}) => (
+    ({classes, title, onMenuClick}) => (
         <>
             <AppBar className={classes.aboveDrawer}>
                 <Toolbar className={classes.toolBar}>

@@ -45,7 +45,7 @@ export const skills = {
 
 };
 
-export const INITIAL_VALUE = 1
+export const INITIAL_VALUE = 1;
 
 export const fetchSkillTree = () => {
     const skillTreeObject = {};
@@ -54,7 +54,7 @@ export const fetchSkillTree = () => {
         if (!skills.hasOwnProperty(group)) continue;
         skillList = {};
         skills[group].map((skill) => {
-            skillList[skill] = INITIAL_VALUE
+            return skillList[skill] = INITIAL_VALUE
         });
         skillTreeObject[group] = skillList
     }

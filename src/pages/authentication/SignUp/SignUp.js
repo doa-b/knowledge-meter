@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
 import {Link, withRouter } from 'react-router-dom';
-import * as ROUTES from '../../shared/routes';
-import {withFirebase} from '../../components/Firebase'
+import * as ROUTES from '../../../shared/routes';
+import {withFirebase} from '../../../components/Firebase'
 import {compose} from 'redux';
-import UserInfo from '../../forms/UserInfo';
-import {fetchSkillTree} from "../../bootstrap/defaultItems";
+import UserInfo from '../../../forms/UserInfo';
 
 const SignUpPage = (props) => {
     const [error, setError] = useState(null);
@@ -22,7 +21,7 @@ const SignUpPage = (props) => {
                     .set(userData);
             })
             .then(() => {
-                props.history.push(ROUTES.HOME)
+                props.history.push(ROUTES.LANDING)
             })
             .catch(error => {
                 setError(error)

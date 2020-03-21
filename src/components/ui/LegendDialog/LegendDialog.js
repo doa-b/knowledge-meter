@@ -4,7 +4,7 @@ import {DialogTitle} from "@material-ui/core";
 import DialogContent from "@material-ui/core/DialogContent";
 import Rating from '@material-ui/lab/Rating';
 
-const styles = theme => ({
+const styles = () => ({
     root: {},
     level: {
         marginLeft: 10
@@ -28,7 +28,7 @@ const LegendDialog = withStyles(styles)(
                 <DialogContent dividers>
                     {caption.map((skill, index) => (
 
-                        <div className={classes.skill}>
+                        <div key={index} className={classes.skill}>
                             <b>{skill}</b>
                             <Rating key={index} className={classes.level}
                                     name={skill}

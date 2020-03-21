@@ -79,6 +79,12 @@ const MySideDrawer = withStyles(styles)(
                         Icon={PersonOutlineIcon}
                         onClick={onItemClick()}
                     />
+                    <NavItem
+                        to={ROUTES.KNOWLEDGE + `/0001`}
+                        text='Knowledge'
+                        Icon={HomeIcon}
+                        onClick={onItemClick()}
+                    />
                 </List>
         );
 
@@ -132,18 +138,6 @@ const MySideDrawer = withStyles(styles)(
                 <NavItem
                     to={ROUTES.KNOWLEDGE + `/${authUser.firstName.toLowerCase()}-${authUser.lastName.toLowerCase()}`}
                     text='Knowledge'
-                    Icon={HomeIcon}
-                    onClick={onItemClick()}
-                />
-                <NavItem
-                    to={ROUTES.LANDING}
-                    text='Landing'
-                    Icon={HomeIcon}
-                    onClick={onItemClick()}
-                />
-                <NavItem
-                    to={ROUTES.HOME}
-                    text='Home'
                     Icon={HomeIcon}
                     onClick={onItemClick()}
                 />
