@@ -79,14 +79,11 @@ const Knowledge = withStyles(styles)(
                         {authUser => {
                             return (
                                 <div className={classes.root}>
-                                    {knowledgeId !=='0001' ? (
-                                        <Typography variant='h2'>{'Knowledge of ' + name[0] + ' ' + name[1]}
-                                        </Typography>
-                                    ) : null}
-                                    <IconButton onClick={()=> setShowDialog(true)}>
-                                        <InfoIcon/>
-                                    </IconButton>
-
+                                        <Typography variant='h2'>{knowledgeId !=='0001' ? 'Knowledge of ' + name[0] + ' ' + name[1] : ''}
+                                            <IconButton onClick={()=> setShowDialog(true)}>
+                                                <InfoIcon/>
+                                            </IconButton>
+                                        </Typography>  
                                     <Grid className={classes.container} container alignItems='center' justify='space-around' alignContent='center'>
                                         {loopThroughObjects(skillSet).map((group, index) =>
                                             <Group key={index}

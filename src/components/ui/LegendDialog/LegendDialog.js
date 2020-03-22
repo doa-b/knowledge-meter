@@ -16,7 +16,7 @@ const styles = () => ({
     },
 });
 
-const caption = ['No experience', 'Basic Knowledge', 'Experienced', 'Very Experienced', 'Expert'];
+const caption = ['No experience', 'Basic Knowledge', 'Experienced', 'Very Experienced', 'Guru'];
 /**
  * Created by Doa on 21-3-2020.
  */
