@@ -114,7 +114,7 @@ const Group = withStyles(styles)(
 
 
         return (
-            <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Grid item xs={12} sm={6} md={4} lg={3} xl={2}>
                 <div className={classes.container}>
                     <Paper className={classes.paper} elevation={4}>
                         <div className={classes.title}>
